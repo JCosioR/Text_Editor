@@ -1,0 +1,4 @@
+
+Esta es la interfaz gráfica.
+
+Este texto es el que escribo durante la ejecución.
