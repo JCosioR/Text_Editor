@@ -25,3 +25,55 @@ class TextEditor:
         file_menu.add_command(label="Salir", command=self.exit_editor)
 
         self.menu.add_cascade(label="Archivo", menu=file_menu)
+
+        # Menú proyecto (con la opción traducir)
+        project_menu = tk.Menu(self.menu, tearoff=0)
+        project_menu.add_command(label="Traducir", command=self.traducir_codigo)
+        self.menu.add_cascade(label="Proyecto", menu=project_menu)
+
+        # Área de texto
+        self.text_area = tk.Text(self.root, wrap="word")
+        self.text_area.pack(expand=1, fill="both")
+
+    def update_title(self, name="Editor de Texto"):
+        self.root.title(name)
+
+    def new_file(self):
+        self.text_area.delete(1.0, tk.END)
+        self.filename = None
+        self.update_title("Nuevo Archivo - Editor de Texto")
+
+    def open_file(self):
+        file_path = filedialog.askopenfilename(filetypes=[("Archivos de Texto", "*.txt", ("Todos", "*.*"))])
+        if file_path:
+            with open (file_path, "r", encoding="utf-8") as file:
+                content = file.read()
+                self.text_area.delete(1.0, tk.END)
+                self.text_area.insert(tk.END, content)
+            self.filename = file_path
+            self.update_title(f"{file_path} - Editor de Texto")
+
+    def save_file(self):
+        if self.filename:
+            with open(self.filename, "w", encoding="utf-8") as file:
+                file.write(self.text_area.get(1.0, tk.END))
+        else:
+            self.save_as()
+
+    def save_as(self):
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Archivos de Texto", "*.txt"), ("Todos", "*.*")])
+        if file_path:
+            self.filename = file_path
+            with open(file_path, "w", encoding="utf-8") as file:
+                file.write(self.text_area.get(1.0, tk.END))
+            self.update_title(f"{file_path} - Editor de Texto")
+    
+    def exit_editor(self):
+        if messagebox.askyesno("Salir", "¿Deseas salir del editor?")
+            self.root.quit()
+
+    def traducir_codigo(self)
+        codigo_c = self.text_area.get(1.0, tk.END)
+        codigo_python = self.traductor.traducir(codigo_c)
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END, codigo_python)
