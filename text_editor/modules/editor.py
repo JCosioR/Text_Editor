@@ -69,10 +69,10 @@ class TextEditor:
             self.update_title(f"{file_path} - Editor de Texto")
     
     def exit_editor(self):
-        if messagebox.askyesno("Salir", "¿Deseas salir del editor?")
+        if messagebox.askyesno("Salir", "¿Deseas salir del editor?"):
             self.root.quit()
 
-    def traducir_codigo(self)
+    def traducir_codigo(self):
         codigo_c = self.text_area.get(1.0, tk.END)
         codigo_python = self.traductor.traducir(codigo_c)
         self.text_area.delete(1.0, tk.END)
