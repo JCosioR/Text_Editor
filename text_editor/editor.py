@@ -1,20 +1,21 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
+from traductor import Traductor # Importamos el traductor
 
-class ProjectMenu:
+class TextEditor:
     def __init__(self, root):
         self.root = root
         self.root.title("Editor de Texto")
         self.root.geometry("600x400")
 
         self.filename = None    # Guarda el nombre del archivo actual
+        self.traductor = Traductor()
 
-        # Menú
-        self.menu = tk.Menu(self.root)          # Creamos la instancia del primer menú
-        self.project_menu = tk.Menu(self.root)  # Creamos la instancia del segundo menú
+        # Menú principal
+        self.menu = tk.Menu(self.root)
         self.root.config(menu=self.menu)
-        self.root.config(menu=self.project_menu)
 
+        # Menú archivo
         file_menu = tk.Menu(self.menu, tearoff=0)
         file_menu.add_command(label="Nuevo", command=self.new_file)
         file_menu.add_command(label="Abrir", command=self.open_file)
@@ -25,8 +26,10 @@ class ProjectMenu:
 
         self.menu.add_cascade(label="Archivo", menu=file_menu)
 
-        #### Se debe modificar el código para incluir un nuevo menú llamado "Proyecto" ###
-        
+        # Menú proyecto (con la opción traducir)
+        project_menu = tk.Menu(self.menu, tearoff=0)
+        project_menu.add_command(label="Traducir", command=self.traducir_codigo)
+        self.menu.add_cascade(label="Proyecto", menu=project_menu)
 
         # Área de texto
         self.text_area = tk.Text(self.root, wrap="word")
@@ -39,11 +42,11 @@ class ProjectMenu:
         self.text_area.delete(1.0, tk.END)
         self.filename = None
         self.update_title("Nuevo Archivo - Editor de Texto")
-    
+
     def open_file(self):
-        file_path = filedialog.askopenfilename(filetypes=[("Archivos de Texto", "*.txt"), ("Todos", "*.*")])
+        file_path = filedialog.askopenfilename(filetypes=[("Archivos de Texto", "*.txt", ("Todos", "*.*"))])
         if file_path:
-            with open(file_path, "r", encoding="utf-8") as file:
+            with open (file_path, "r", encoding="utf-8") as file:
                 content = file.read()
                 self.text_area.delete(1.0, tk.END)
                 self.text_area.insert(tk.END, content)
@@ -56,7 +59,7 @@ class ProjectMenu:
                 file.write(self.text_area.get(1.0, tk.END))
         else:
             self.save_as()
-    
+
     def save_as(self):
         file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Archivos de Texto", "*.txt"), ("Todos", "*.*")])
         if file_path:
@@ -69,7 +72,8 @@ class ProjectMenu:
         if messagebox.askyesno("Salir", "¿Deseas salir del editor?"):
             self.root.quit()
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    editor = ProjectMenu(root)
-    root.mainloop()
+    def traducir_codigo(self):
+        codigo_c = self.text_area.get(1.0, tk.END)
+        codigo_python = self.traductor.traducir(codigo_c)
+        self.text_area.delete(1.0, tk.END)
+        self.text_area.insert(tk.END, codigo_python)
