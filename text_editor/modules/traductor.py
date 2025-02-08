@@ -1,5 +1,11 @@
 class Traductor:
     def __init__(self):
+        #letra = {a,b,c,...z,A,B,C,...,Z}
+        #digito = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+        #simbolos = {#, (, ) [, ], ;, operadores, {, }, }
+        #identificadores, palabras reservadas, nombres de funciones, numeros (int, float)
+        
+        
         self.equivalencias = {
             "int main() {" : "if __name__ == \"__main__\":",
             "printf(" : "print(",
